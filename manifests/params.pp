@@ -100,37 +100,8 @@ class ssh::params {
     }
   }
 
-  # OpenBSDs openssh doesn't link against PAM, therefore
-  # it doesn't know about the UsePAM option
-  case $::osfamily {
-    openbsd: {
-      $sshd_default_options = {
-        'ChallengeResponseAuthentication' => 'no',
-        'X11Forwarding'                   => 'yes',
-        'PrintMotd'                       => 'no',
-        'AcceptEnv'                       => 'LANG LC_*',
-        'Subsystem'                       => "sftp ${sftp_server_path}",
-      }
-    }
-    default: {
-      $sshd_default_options = {
-        'ChallengeResponseAuthentication' => 'no',
-        'X11Forwarding'                   => 'yes',
-        'PrintMotd'                       => 'no',
-        'AcceptEnv'                       => 'LANG LC_*',
-        'Subsystem'                       => "sftp ${sftp_server_path}",
-        'UsePAM'                          => 'yes',
-      }
-
-    }
-  }
-
-  $ssh_default_options = {
-    'Host *'                 => {
-      'SendEnv'              => 'LANG LC_*',
-      'HashKnownHosts'       => 'yes',
-    },
-  }
+  $sshd_default_options = {}
+  $ssh_default_options  = {}
 
   $user_ssh_directory_default_mode = '0700'
   $user_ssh_config_default_mode    = '0600'
